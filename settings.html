@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Settings — Life Leveling System</title>
+		<link rel="stylesheet" href="settings-styles.css" />
+	</head>
+	<body>
+		<main class="container">
+			<header class="topbar">
+				<div class="title">
+					<h1>Settings</h1>
+				</div>
+				<div class="top-actions">
+					<button class="btn ghost" onclick="window.location.href='index.html'">← Back to Dashboard</button>
+				</div>
+			</header>
+
+			<div class="settings-content">
+				<section class="settings-card">
+					<h2>Profile Settings</h2>
+					
+					<div class="setting-group">
+						<label for="userName">Username</label>
+						<div class="input-with-button">
+							<input type="text" id="userName" placeholder="Enter your name" maxlength="30" />
+							<button class="btn" id="saveUserName">Save</button>
+						</div>
+						<p class="help-text">This name will appear on your profile and dashboard</p>
+					</div>
+
+					<div class="setting-group">
+						<label for="avatarUpload">Profile Picture</label>
+						<div class="avatar-section">
+							<img id="avatarPreview" src="Images/Default_profile.png" alt="Avatar Preview" class="avatar-preview" />
+							<div class="avatar-controls">
+								<input type="file" id="avatarUpload" accept="image/*" style="display: none;" />
+								<button class="btn secondary" id="uploadAvatarBtn">Upload Image</button>
+								<button class="btn ghost" id="resetAvatarBtn">Reset to Default</button>
+							</div>
+						</div>
+						<p class="help-text">Recommended: Square image, max 2MB</p>
+					</div>
+				</section>
+
+				<section class="settings-card">
+					<h2>System Settings</h2>
+					
+					<div class="setting-group">
+						<label>Daily Quest Reset Time</label>
+						<select id="resetTime" class="setting-select">
+							<option value="0">12:00 AM (Midnight)</option>
+							<option value="6">6:00 AM</option>
+							<option value="12">12:00 PM (Noon)</option>
+							<option value="18">6:00 PM</option>
+						</select>
+						<p class="help-text">Choose when your daily quests reset each day</p>
+					</div>
+
+					<div class="setting-group">
+						<div class="toggle-setting">
+							<div>
+								<label>Sound Effects</label>
+								<p class="help-text">Play sounds on level up and quest completion</p>
+							</div>
+							<label class="toggle">
+								<input type="checkbox" id="soundToggle" checked />
+								<span class="toggle-slider"></span>
+							</label>
+						</div>
+					</div>
+
+					<div class="setting-group">
+						<div class="toggle-setting">
+							<div>
+								<label>Browser Notifications</label>
+								<p class="help-text">Get reminded about daily quest resets</p>
+							</div>
+							<label class="toggle">
+								<input type="checkbox" id="notificationsToggle" />
+								<span class="toggle-slider"></span>
+							</label>
+						</div>
+					</div>
+				</section>
+
+				<section class="settings-card">
+					<h2>Data Management</h2>
+					
+					<div class="setting-group">
+						<label>Export Your Data</label>
+						<button class="btn secondary" id="exportDataBtn">📥 Download Progress (JSON)</button>
+						<p class="help-text">Backup your progress to a file</p>
+					</div>
+
+					<div class="setting-group">
+						<label>Import Data</label>
+						<input type="file" id="importDataInput" accept=".json" style="display: none;" />
+						<button class="btn secondary" id="importDataBtn">📤 Import Progress</button>
+						<p class="help-text">Restore progress from a backup file</p>
+					</div>
+
+					<div class="setting-group danger-zone">
+						<label>Danger Zone</label>
+						<button class="btn danger" id="resetAllBtn">🗑️ Reset All Progress</button>
+						<p class="help-text warning">⚠️ This will delete all your progress permanently!</p>
+					</div>
+				</section>
+
+				<section class="settings-card">
+					<h2>About</h2>
+					<div class="about-info">
+						<p><strong>Life Leveling System</strong></p>
+						<p>Version 1.0</p>
+						<p>A real-life improvement tracker inspired by Solo Leveling</p>
+						<p class="muted">All data is stored locally in your browser</p>
+					</div>
+				</section>
+			</div>
+		</main>
+
+		<!-- Confirmation Modal -->
+		<div id="confirmModal" class="modal" aria-hidden="true">
+			<div class="modal-card">
+				<h3 id="confirmTitle">Confirm Action</h3>
+				<p id="confirmMessage">Are you sure?</p>
+				<div class="modal-actions">
+					<button type="button" id="confirmYes" class="btn danger">Confirm</button>
+					<button type="button" id="confirmNo" class="btn ghost">Cancel</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Success Toast -->
+		<div id="toast" class="toast" aria-hidden="true">
+			<span id="toastMessage">Settings saved!</span>
+		</div>
+
+		<!-- Image Crop Modal -->
+		<div id="cropModal" class="modal" aria-hidden="true">
+			<div class="modal-card crop-modal">
+				<h3>Crop Your Avatar</h3>
+				<p style="color: #b8956a; margin-bottom: 15px;">Drag and resize the crop area to select the perfect square</p>
+				<div class="crop-container">
+					<img id="cropImage" src="" alt="Image to crop" />
+					<div id="cropBox" class="crop-box">
+						<div class="crop-handle top-left"></div>
+						<div class="crop-handle top-right"></div>
+						<div class="crop-handle bottom-left"></div>
+						<div class="crop-handle bottom-right"></div>
+					</div>
+				</div>
+				<div class="modal-actions">
+					<button type="button" id="applyCrop" class="btn">✂️ Crop & Save</button>
+					<button type="button" id="cancelCrop" class="btn ghost">Cancel</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="settings.js"></script>
+	</body>
+</html>

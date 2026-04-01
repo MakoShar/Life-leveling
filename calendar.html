@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Calendar - Life Leveling System</title>
+    <link rel="stylesheet" href="calendar-styles.css">
+</head>
+<body>
+    <div class="calendar-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+                <button class="close-sidebar" id="closeSidebar">&times;</button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link">
+                    <span class="sidebar-icon">📋</span>
+                    <span>Back to Menu</span>
+                </a>
+                <a href="shop.html" class="sidebar-link">
+                    <span class="sidebar-icon">🛒</span>
+                    <span>Shop</span>
+                </a>
+                <a href="dungeons.html" class="sidebar-link">
+                    <span class="sidebar-icon">⚔️</span>
+                    <span>Dungeons</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Add Task Modal -->
+        <div class="modal" id="addTaskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Task</h2>
+                    <button class="close-modal" id="closeModal">&times;</button>
+                </div>
+                <form id="addTaskForm" class="task-form">
+                    <div class="form-group">
+                        <label for="taskName">Task Name</label>
+                        <input type="text" id="taskName" required placeholder="Enter task name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority" required>
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskDate">Date</label>
+                        <input type="date" id="taskDate" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskTimeFrom">Time From</label>
+                            <input type="time" id="taskTimeFrom">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskTimeTo">Time To</label>
+                            <input type="time" id="taskTimeTo">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskRecurring">Recurring</label>
+                        <select id="taskRecurring">
+                            <option value="none">None</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="endDateGroup" style="display: none;">
+                        <label for="taskEndDate">End On</label>
+                        <input type="date" id="taskEndDate">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="cancelTask">Cancel</button>
+                        <button type="submit" class="btn-submit">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="calendar-header">
+            <div class="header-left">
+                <button class="menu-btn" id="hamburgerBtn">☰</button>
+                <div class="logo">
+                    <span class="logo-icon">📅</span>
+                    <span class="logo-text">Calendar</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <button class="btn-today" id="todayBtn">Today</button>
+                <div class="navigation">
+                    <button class="nav-btn" id="prevBtn">‹</button>
+                    <button class="nav-btn" id="nextBtn">›</button>
+                </div>
+                <h2 id="currentMonth">December 2025</h2>
+            </div>
+            <div class="header-right">
+                <div class="view-selector">
+                    <button class="view-btn">Daily</button>
+                    <button class="view-btn">Weekly</button>
+                    <button class="view-btn active">Monthly</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="calendar-container">
+            <!-- Left Sidebar - Mini Calendar -->
+            <div class="left-panel">
+                <button class="create-btn" id="createBtn">
+                    <span class="plus-icon">+</span>
+                    <span>Create</span>
+                </button>
+
+                <div class="mini-calendar">
+                    <div class="mini-calendar-header">
+                        <button class="mini-nav" id="miniPrevBtn">‹</button>
+                        <span id="miniMonth">December 2025</span>
+                        <button class="mini-nav" id="miniNextBtn">›</button>
+                    </div>
+                    <div class="mini-calendar-grid">
+                        <div class="mini-day-header">S</div>
+                        <div class="mini-day-header">M</div>
+                        <div class="mini-day-header">T</div>
+                        <div class="mini-day-header">W</div>
+                        <div class="mini-day-header">T</div>
+                        <div class="mini-day-header">F</div>
+                        <div class="mini-day-header">S</div>
+                        <div id="miniCalendarDays"></div>
+                    </div>
+                </div>
+
+                <div class="my-calendars">
+                    <h3>My calendars</h3>
+                    <div class="calendar-item">
+                        <input type="checkbox" id="dailyQuests" checked>
+                        <label for="dailyQuests">Daily Quests</label>
+                    </div>
+                    <div class="calendar-item">
+                        <input type="checkbox" id="activeQuests" checked>
+                        <label for="activeQuests">Active Quests</label>
+                    </div>
+                    <div class="calendar-item">
+                        <input type="checkbox" id="dungeons" checked>
+                        <label for="dungeons">Dungeons</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Calendar Grid -->
+            <div class="main-calendar">
+                <div class="calendar-grid">
+                    <div class="day-header">SUN</div>
+                    <div class="day-header">MON</div>
+                    <div class="day-header">TUE</div>
+                    <div class="day-header">WED</div>
+                    <div class="day-header">THU</div>
+                    <div class="day-header">FRI</div>
+                    <div class="day-header">SAT</div>
+                    <div id="calendarDays"></div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar - Profile & Stats -->
+            <div class="right-panel">
+                <div class="profile-section">
+                    <img id="calendarAvatar" src="Images/Default_profile.png" alt="Avatar" class="profile-avatar">
+                    <h2 id="calendarUserName">User name</h2>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Level</span>
+                            <span class="stat-value" id="calendarLevel">1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Credits</span>
+                            <span class="stat-value" id="calendarCredits">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="xp-section">
+                        <div class="xp-bar-container">
+                            <div class="xp-bar" id="calendarXpBar"></div>
+                        </div>
+                        <div class="xp-text">
+                            <span id="calendarXp">0</span> / <span id="calendarNextXp">100</span> XP
+                        </div>
+                    </div>
+                </div>
+
+                <div class="penalties-section">
+                    <h3>⚠️ Penalties</h3>
+                    <div id="calendarPenalties" class="penalties-content">
+                        None
+                    </div>
+                </div>
+
+                <div class="tasks-section">
+                    <h3>Today's Daily Quests</h3>
+                    <div id="dailyQuestsList"></div>
+                </div>
+
+                <div class="tasks-section">
+                    <h3>Active Quests</h3>
+                    <div id="activeQuestsList"></div>
+                </div>
+
+                <div class="tasks-section">
+                    <h3>Upcoming Dungeons</h3>
+                    <div id="dungeonsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="calendar.js"></script>
+</body>
+</html>

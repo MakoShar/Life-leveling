@@ -1,0 +1,501 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: url('Images/Dongen/Warrior.jpg') center/cover no-repeat fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #f9f1e0;
+}
+
+/* Back Button */
+.back-btn-top {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 12px 24px;
+    background: rgba(26, 15, 10, 0.9);
+    color: #f9f1e0;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Georgia', serif;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.back-btn-top:hover {
+    background: rgba(139, 90, 43, 0.95);
+    transform: translateX(-5px);
+}
+
+/* Main Container */
+.dungeons-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 40px 40px 300px;
+}
+
+/* Header */
+.dungeons-header {
+    text-align: center;
+    margin-bottom: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    border: 3px solid #d4af37;
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+}
+
+.dungeons-header h1 {
+    font-size: 48px;
+    color: #d4af37;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
+                 0 0 40px rgba(212, 175, 55, 0.5);
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+.player-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #b8956a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #d4af37;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Dungeons Grid */
+.dungeons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+/* Dungeon Card */
+.dungeon-card {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 15, 10, 0.9));
+    border: 3px solid #8b5a2b;
+    border-radius: 15px;
+    padding: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dungeon-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.dungeon-card:hover::before {
+    left: 100%;
+}
+
+.dungeon-card:hover {
+    transform: translateY(-10px);
+    border-color: #d4af37;
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+}
+
+.dungeon-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dungeon-card.locked:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.dungeon-rank {
+    display: inline-block;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.rank-E { background: linear-gradient(135deg, #666, #888); color: #fff; }
+.rank-D { background: linear-gradient(135deg, #4a7c59, #5d9e6e); color: #fff; }
+.rank-C { background: linear-gradient(135deg, #4169e1, #5a8af2); color: #fff; }
+.rank-B { background: linear-gradient(135deg, #9370db, #a689e3); color: #fff; }
+.rank-A { background: linear-gradient(135deg, #ff8c00, #ffa500); color: #fff; }
+.rank-S { background: linear-gradient(135deg, #ff0000, #ff4444); color: #fff; }
+
+.dungeon-card h3 {
+    font-size: 24px;
+    color: #d4af37;
+    margin-bottom: 15px;
+}
+
+.dungeon-description {
+    font-size: 14px;
+    color: #b8956a;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.dungeon-stats {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.dungeon-stat {
+    text-align: center;
+}
+
+.dungeon-stat-label {
+    font-size: 11px;
+    color: #8b7355;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.dungeon-stat-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d4af37;
+}
+
+.lock-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 64px;
+    opacity: 0.3;
+}
+
+/* Active Dungeon */
+.active-dungeon {
+    background: linear-gradient(135deg, rgba(139, 90, 43, 0.3), rgba(26, 15, 10, 0.5));
+    border: 3px solid #d4af37;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 40px;
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+}
+
+.active-dungeon h2 {
+    color: #d4af37;
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.dungeon-info {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.dungeon-name {
+    font-size: 24px;
+    color: #f9f1e0;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.dungeon-details {
+    color: #b8956a;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.dungeon-progress {
+    margin-bottom: 25px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid #8b5a2b;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #d4af37, #ffd700);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+.progress-text {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #d4af37;
+}
+
+.btn-complete, .btn-abandon {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Georgia', serif;
+    margin: 0 10px;
+}
+
+.btn-complete {
+    background: linear-gradient(135deg, #4a7c59, #5d9e6e);
+    color: #fff;
+}
+
+.btn-complete:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(93, 158, 110, 0.5);
+}
+
+.btn-abandon {
+    background: linear-gradient(135deg, #8b4513, #a0522d);
+    color: #fff;
+}
+
+.btn-abandon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(139, 69, 19, 0.5);
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: linear-gradient(to bottom, #1a0f0a, #2c1810);
+    margin: 5% auto;
+    padding: 0;
+    border: 3px solid #d4af37;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    animation: slideDown 0.3s ease;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #8b5a2b, #6d4423);
+    padding: 25px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #d4af37;
+}
+
+.modal-header h2 {
+    color: #d4af37;
+    font-size: 28px;
+}
+
+.close-modal {
+    font-size: 36px;
+    font-weight: bold;
+    color: #f9f1e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #d4af37;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+    color: #b8956a;
+}
+
+.modal-body h3 {
+    color: #d4af37;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+    padding-bottom: 8px;
+}
+
+.dungeon-requirements, .dungeon-rewards {
+    margin-top: 20px;
+}
+
+.requirement-item, .reward-item {
+    padding: 10px;
+    background: rgba(139, 90, 43, 0.2);
+    border-left: 3px solid #d4af37;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.modal-footer {
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    border-top: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.btn-cancel, .btn-enter, .btn-primary {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Georgia', serif;
+}
+
+.btn-cancel {
+    background: #666;
+    color: #fff;
+}
+
+.btn-cancel:hover {
+    background: #555;
+}
+
+.btn-enter {
+    background: linear-gradient(135deg, #d4af37, #ffd700);
+    color: #1a0f0a;
+}
+
+.btn-enter:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #8b5a2b, #6d4423);
+    color: #f9f1e0;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+/* Completion Modal */
+.completion-modal .modal-header {
+    background: linear-gradient(135deg, #4a7c59, #5d9e6e);
+}
+
+.rewards-display {
+    padding: 20px;
+    background: rgba(139, 90, 43, 0.2);
+    border-radius: 10px;
+    border: 2px solid #d4af37;
+}
+
+.rewards-display h3 {
+    color: #d4af37;
+    margin-bottom: 15px;
+}
+
+.rewards-display ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rewards-display li {
+    padding: 10px;
+    margin-bottom: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    border-left: 3px solid #d4af37;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dungeons-header h1 {
+        font-size: 32px;
+    }
+    
+    .player-stats {
+        gap: 20px;
+    }
+    
+    .dungeons-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .back-btn-top {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .dungeons-container {
+        padding: 100px 20px 40px 20px;
+    }
+}

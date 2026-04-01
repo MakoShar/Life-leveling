@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Leveling - Dungeons</title>
+    <link rel="stylesheet" href="dungeons-styles.css">
+</head>
+<body>
+    <!-- Back Button -->
+    <button class="back-btn-top" onclick="window.location.href='index.html'">
+        ← Back to System
+    </button>
+
+    <div class="dungeons-container">
+        <div class="dungeons-header">
+            <h1>⚔️ DUNGEON GATE ⚔️</h1>
+            <div class="player-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value" id="playerLevel">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">HP</span>
+                    <span class="stat-value" id="playerHP">100</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Credits</span>
+                    <span class="stat-value" id="playerCredits">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dungeon Selection -->
+        <div class="dungeons-grid" id="dungeonsGrid">
+            <!-- Dungeons will be dynamically loaded here -->
+        </div>
+
+        <!-- Active Dungeon Display -->
+        <div class="active-dungeon" id="activeDungeon" style="display: none;">
+            <h2>Current Dungeon</h2>
+            <div class="dungeon-info">
+                <div class="dungeon-name" id="activeDungeonName"></div>
+                <div class="dungeon-details" id="activeDungeonDetails"></div>
+                <div class="dungeon-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="dungeonProgress"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+                <button class="btn-complete" id="completeDungeonBtn">Complete Dungeon</button>
+                <button class="btn-abandon" id="abandonDungeonBtn">Abandon</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dungeon Details Modal -->
+    <div id="dungeonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalDungeonName">Dungeon Name</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="dungeon-rank" id="modalDungeonRank"></div>
+                <div class="dungeon-description" id="modalDungeonDescription"></div>
+                <div class="dungeon-requirements">
+                    <h3>Requirements</h3>
+                    <div id="modalRequirements"></div>
+                </div>
+                <div class="dungeon-rewards">
+                    <h3>Rewards</h3>
+                    <div id="modalRewards"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelDungeon">Cancel</button>
+                <button class="btn-enter" id="enterDungeon">Enter Dungeon</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completion Modal -->
+    <div id="completionModal" class="modal">
+        <div class="modal-content completion-modal">
+            <div class="modal-header">
+                <h2>🎉 Dungeon Cleared! 🎉</h2>
+            </div>
+            <div class="modal-body">
+                <div class="rewards-display" id="rewardsDisplay"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="closeCompletion">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dungeons.js"></script>
+</body>
+</html>

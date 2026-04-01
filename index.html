@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Solo Leveling — Skill Tracker</title>
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+			<main class="container grid-layout">
+				<header class="topbar">
+					<div class="title">
+						<h1>Life-Leveling System</h1>
+				</div>
+				<div class="top-actions">
+					<button class="btn ghost" onclick="window.open('calendar.html', '_blank')">Quest list</button>
+					<button class="btn ghost" onclick="window.location.href='shop.html'">Shop</button>
+					<button class="btn ghost" onclick="window.location.href='dungeons.html'">Dungeon</button>
+					<button class="btn ghost" onclick="window.location.href='settings.html'">⚙️ Settings</button>
+				</div>
+			</header>				<aside class="left-sidebar">
+					<h3>Inventory</h3>
+					<div class="inventory-list">
+						<div>• How to use Guide:</div>
+					</div>
+
+					<h3>Ongoing Quests</h3>
+					<div class="ongoing-quests">
+						<div class="pill">Handstand: <strong>3 Days</strong></div>
+					</div>
+				</aside>
+
+				<section class="center-hud">
+					<section class="progress-card">
+						<!-- Stat Points Display at Top -->
+						<div class="stat-allocation-header">
+							<div class="stat-points-display">
+								Stat Points: <strong id="statPoints">5</strong>
+								<button id="convertToCredits" class="btn secondary" style="margin-left: 12px; font-size: 0.85em; padding: 6px 12px;">Convert to Credits</button>
+							</div>
+							<div style="font-size: 0.8em; color: var(--muted); margin-top: 4px;">
+								Stats increase automatically through quests | 35 points = 1 credit
+							</div>
+						</div>
+
+						<!-- Radar Chart Centered -->
+						<div class="radar-container">
+							<svg id="radarChart" viewBox="0 0 500 500" class="radar-chart">
+								<!-- Grid lines and labels will be drawn here -->
+								<g id="gridLines"></g>
+								<!-- Stat polygons -->
+								<g id="statPolygons"></g>
+								<!-- Labels -->
+								<g id="statLabels"></g>
+								<!-- Value labels -->
+								<g id="valueLabels"></g>
+							</svg>
+						</div>
+
+					<!-- Bottom Controls -->
+					<div class="bottom-controls">
+						<button class="btn" onclick="window.location.href='shop.html'">Store</button>
+						<button class="btn" onclick="window.location.href='dungeons.html'">Dungeons</button>
+					</div>
+					</section>								<div class="center-bottom">
+									<section class="quests">
+				<div class="quests-header">
+					<h2>Active Quests</h2>
+					<div class="quests-actions">
+						<button class="btn" id="addQuestBtn">+ New Quest</button>
+						<button class="btn secondary" id="resetBtn">Reset Progress</button>
+					</div>
+				</div>
+
+				<ul id="questList" class="quest-list" aria-live="polite"></ul>
+
+				<div class="empty-note" id="emptyNote">No quests yet — add a quest to get started.</div>
+									</section>
+
+									<!-- Dungeon area -->
+									<section class="dungeons">
+										<div class="quests-header">
+											<h2>Dungeons</h2>
+											<div class="quests-actions">
+												<button id="newDungeonBtn" class="btn">+ New Dungeon</button>
+											</div>
+										</div>
+										<ul id="dungeonList" class="quest-list"></ul>
+										<div class="empty-note" id="emptyDungeonNote">No dungeons — create a timed challenge.</div>
+									</section>
+								</div>
+							</section>
+
+							<aside class="right-sidebar">
+								<div class="profile-card">
+									<img id="avatarImg" src="Images/Default_profile.png" alt="Avatar" class="avatar-img" />
+									<h3 id="userName">User name</h3>
+									<div class="profile-row">
+										<div>Level <span id="level">1</span></div>
+										<div>Credits: <span id="creditsDisplay">0</span></div>
+									</div>
+									<div class="xp-wrap"><div class="xp-bar-wrap"><div id="xpBarRight" class="xp-bar right"></div></div><div class="xp-text">XP: <span id="xp">0</span></div></div>
+									<h4>Daily Quest <span id="dailyTimer" class="daily-timer">23:59:59</span></h4>
+									<ul class="daily-list" id="dailyQuestList">
+										<li><input type="checkbox" id="daily1" data-quest="pushups"><label for="daily1" id="label-pushups">Pushups: x5</label></li>
+										<li><input type="checkbox" id="daily2" data-quest="situps"><label for="daily2" id="label-situps">Situps: x5</label></li>
+										<li><input type="checkbox" id="daily3" data-quest="crunches"><label for="daily3" id="label-crunches">Crunches: x5</label></li>
+										<li><input type="checkbox" id="daily4" data-quest="running"><label for="daily4" id="label-running">Running: x1 KM</label></li>
+										<li><input type="checkbox" id="daily5" data-quest="reading"><label for="daily5" id="label-reading">Book reading: x5 pages</label></li>
+									</ul>
+									<h4>Penalties</h4>
+									<div class="penalties" id="penaltiesDisplay">None</div>
+									<button id="clearPjogBtn" class="btn secondary" style="margin-top: 8px; display: none; font-size: 0.85em; padding: 6px 12px;">Use Scroll 📜</button>
+								</div>
+							</aside>
+
+							<footer class="footer">
+								Built for practice. Data saved locally in your browser.
+							</footer>
+						</main>
+
+		<!-- Add Quest Modal -->
+		<div id="modal" class="modal" aria-hidden="true">
+			<form id="questForm" class="modal-card" role="dialog" aria-modal="true">
+				<h3>Add Quest</h3>
+				<label>
+					Title
+					<input id="questTitle" required maxlength="60" />
+				</label>
+				<label>
+					Description
+					<textarea id="questDescription" rows="2" maxlength="200"></textarea>
+				</label>
+				<label>
+					XP Reward
+					<input id="questXp" type="number" min="1" value="15" required />
+				</label>
+				
+				<h4 style="margin-top: 12px; margin-bottom: 8px; font-size: 0.9em;">Stat Rewards (Optional)</h4>
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+					<label style="font-size: 0.85em;">
+						STR <input id="questSTR" type="number" min="0" value="0" style="padding: 4px;" />
+					</label>
+					<label style="font-size: 0.85em;">
+						AGI <input id="questAGI" type="number" min="0" value="0" style="padding: 4px;" />
+					</label>
+					<label style="font-size: 0.85em;">
+						CHR <input id="questCHR" type="number" min="0" value="0" style="padding: 4px;" />
+					</label>
+					<label style="font-size: 0.85em;">
+						STA <input id="questSTA" type="number" min="0" value="0" style="padding: 4px;" />
+					</label>
+					<label style="font-size: 0.85em;">
+						INT <input id="questINT" type="number" min="0" value="0" style="padding: 4px;" />
+					</label>
+					<label style="font-size: 0.85em;">
+						WIL <input id="questWIL" type="number" min="0" value="0" style="padding: 4px;" />
+					</label>
+				</div>
+				
+				<div class="modal-actions">
+					<button type="submit" class="btn">Add Quest</button>
+					<button type="button" class="btn ghost" id="cancelModal">Cancel</button>
+				</div>
+			</form>
+		</div>
+
+					<!-- Daily Success Modal (quote reward) -->
+					<div id="dailySuccessModal" class="modal" aria-hidden="true">
+						<div class="modal-card">
+							<h3>Daily Quest Complete</h3>
+							<p class="reward-line">You earned <strong id="dailyXpReward">0</strong> XP</p>
+							<blockquote id="sungQuote" class="sung-quote">"Arise."</blockquote>
+							<div class="modal-actions">
+								  <button type="button" id="claimDaily" class="btn">Claim</button>
+								  <button type="button" id="saveQuoteBtn" class="btn ghost">Save Quote</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Penalty Modal -->
+					<div id="penaltyModal" class="modal" aria-hidden="true">
+						<div class="modal-card">
+							<h3>Penalty Required</h3>
+							<p id="penaltyText">You failed your Daily Quest. Choose a penalty and log completion.</p>
+							<div class="penalty-choices">
+								  <button type="button" class="btn" data-penalty="sprint">Sprint 5 minutes</button>
+								  <button type="button" class="btn" data-penalty="volume">100 push-ups</button>
+								  <button type="button" class="btn small ghost" id="buyMercy">Use Mercy Token (cost: 200 Gold)</button>
+							</div>
+							<div class="modal-actions">
+								  <button type="button" id="logPenalty" class="btn">Log Penalty Completed</button>
+								  <button type="button" id="closePenalty" class="btn ghost">Cancel</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Quote Vault Modal -->
+					<div id="quoteVault" class="modal" aria-hidden="true">
+						<div class="modal-card">
+							<h3>Quote Vault</h3>
+							<ul id="vaultList" class="quest-list"></ul>
+							<div class="modal-actions">
+								  <button type="button" id="closeVault" class="btn ghost">Close</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- New Dungeon Modal -->
+					<div id="newDungeonModal" class="modal" aria-hidden="true">
+						<div class="modal-card">
+							<h3>Create Dungeon</h3>
+							<label>Dungeon Name<input id="dName" /></label>
+							<label>Goal Description<input id="dGoal" /></label>
+							<label>Duration (days)<input id="dDays" type="number" min="1" value="7" /></label>
+							<label>XP Reward<input id="dXp" type="number" value="200" /></label>
+							<label>Gold Reward<input id="dGold" type="number" value="100" /></label>
+							<div class="modal-actions">
+								  <button type="button" id="createDungeon" class="btn">Create</button>
+								  <button type="button" id="cancelDungeon" class="btn ghost">Cancel</button>
+							</div>
+						</div>
+					</div>
+
+			</form>
+		</div>
+
+			<!-- Allocate Points Modal -->
+			<div id="allocateModal" class="modal" aria-hidden="true">
+				<div class="modal-card">
+					<h3>Allocate Stat Points</h3>
+					<p>Distribute your available stat points. Each level grants +5 points.</p>
+					<div class="alloc-grid">
+						<div class="alloc-row"><label>STR (Strength)</label><div class="alloc-controls"><button class="btn small" data-action="dec" data-stat="STR">-</button><span id="STR_val">10</span><button class="btn small" data-action="inc" data-stat="STR">+</button></div></div>
+						<div class="alloc-row"><label>AGI (Agility)</label><div class="alloc-controls"><button class="btn small" data-action="dec" data-stat="AGI">-</button><span id="AGI_val">10</span><button class="btn small" data-action="inc" data-stat="AGI">+</button></div></div>
+						<div class="alloc-row"><label>CHR (Charm)</label><div class="alloc-controls"><button class="btn small" data-action="dec" data-stat="CHR">-</button><span id="CHR_val">10</span><button class="btn small" data-action="inc" data-stat="CHR">+</button></div></div>
+						<div class="alloc-row"><label>STA (Stamina)</label><div class="alloc-controls"><button class="btn small" data-action="dec" data-stat="STA">-</button><span id="STA_val">10</span><button class="btn small" data-action="inc" data-stat="STA">+</button></div></div>
+						<div class="alloc-row"><label>INT (Intelligence)</label><div class="alloc-controls"><button class="btn small" data-action="dec" data-stat="INT">-</button><span id="INT_val">10</span><button class="btn small" data-action="inc" data-stat="INT">+</button></div></div>
+						<div class="alloc-row"><label>WIL (Will power)</label><div class="alloc-controls"><button class="btn small" data-action="dec" data-stat="WIL">-</button><span id="WIL_val">10</span><button class="btn small" data-action="inc" data-stat="WIL">+</button></div></div>
+					</div>
+					<div class="modal-actions">
+						<button id="saveAlloc" class="btn">Save</button>
+						<button id="closeAlloc" class="btn ghost">Cancel</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Level Up Modal -->
+			<div id="levelUpModal" class="modal" aria-hidden="true">
+				<div class="modal-card">
+					<h2>Level Up!</h2>
+					<p id="levelUpText">You've reached Level <span id="newLevel">1</span> — You earned <strong id="earnedPoints">5</strong> stat points.</p>
+					<div class="modal-actions">
+						<button id="openAllocatorFromLevelUp" class="btn">Allocate Now</button>
+						<button id="closeLevelUp" class="btn ghost">Later</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Shop Modal / Locked Overlay -->
+			<div id="shopModal" class="modal" aria-hidden="true">
+					<div class="modal-card shop-card">
+						<h3>System Shop</h3>
+						<div id="shopIntro" class="shop-intro" aria-hidden="false"></div>
+						<div id="shopPreview" class="shop-preview"></div>
+						<div id="shopContent"></div>
+						<div class="modal-actions">
+							<button type="button" id="closeShop" class="btn ghost">Close</button>
+						</div>
+					</div>
+			</div>
+
+				<!-- Purchase Confirmation Modal -->
+				<div id="purchaseModal" class="modal" aria-hidden="true">
+					<div class="modal-card">
+						<h3>Confirm Purchase</h3>
+						<p id="purchaseText">Buy item?</p>
+						<div class="modal-actions">
+							<button type="button" id="confirmPurchase" class="btn">Confirm</button>
+							<button type="button" id="cancelPurchase" class="btn ghost">Cancel</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Shop Unlock Animation Modal -->
+				<div id="shopUnlockModal" class="modal" aria-hidden="true">
+					<div class="modal-card">
+						<h2>Shop Unlocked</h2>
+						<p class="muted">High-tier items are now available.</p>
+						<div class="modal-actions">
+							<button type="button" id="enterShopAfterUnlock" class="btn">Open Shop</button>
+						</div>
+					</div>
+				</div>
+
+		<canvas id="confetti"></canvas>
+
+		<script src="app.js" defer></script>
+	</body>
+</html>
+

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Leveling - Shop</title>
+    <link rel="stylesheet" href="shop-styles.css">
+</head>
+<body>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-btn" id="hamburgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>My Inventory</h2>
+            <button class="close-sidebar" id="closeSidebar">&times;</button>
+        </div>
+        
+        <div class="sidebar-credits">
+            <div class="credits-badge">
+                <span class="credits-icon">💎</span>
+                <div>
+                    <div class="credits-label">Total Credits</div>
+                    <div class="credits-amount" id="sidebarCredits">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <h3>Your Guides</h3>
+            <div id="purchasedGuides" class="purchased-guides">
+                <!-- Purchased items will be listed here -->
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="sidebar-back-btn" onclick="window.location.href='index.html'">
+                ← Back to System
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="shop-container">
+        <!-- Shop Background -->
+        <div class="shop-background">
+            <!-- Shopkeeper Character -->
+            <div class="shopkeeper">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop" alt="Shopkeeper" class="shopkeeper-image">
+            </div>
+
+            <!-- Parchment Scroll Display -->
+            <div class="parchment-scroll">
+                <!-- Scroll Top -->
+                <div class="scroll-top"></div>
+                
+                <!-- Scroll Content -->
+                <div class="scroll-content">
+                    <!-- Header -->
+                    <div class="shop-header">
+                        <h1>✦ SYSTEM SHOP ✦</h1>
+                        <div class="credits-display">
+                            <span class="credits-icon">💎</span>
+                            <span id="shopCredits">0</span> Credits
+                        </div>
+                    </div>
+
+                    <!-- Category Tabs -->
+                    <div class="category-tabs">
+                        <button class="tab-btn active" data-category="all">All Items</button>
+                        <button class="tab-btn" data-category="mental">Mental Health</button>
+                        <button class="tab-btn" data-category="gym">Gym Guide</button>
+                        <button class="tab-btn" data-category="nutrition">Nutrition</button>
+                        <button class="tab-btn" data-category="skills">Life Skills</button>
+                        <button class="tab-btn" data-category="special">Special Items</button>
+                    </div>
+
+                    <!-- Items Grid -->
+                    <div class="items-container" id="itemsContainer">
+                        <!-- Items will be dynamically loaded here -->
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="shop-footer">
+                        <button class="back-btn" onclick="window.location.href='index.html'">← Return to System</button>
+                    </div>
+                </div>
+
+                <!-- Scroll Bottom -->
+                <div class="scroll-bottom"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Confirmation Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Purchase</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="item-preview" id="modalItemPreview"></div>
+                <p id="modalItemDescription"></p>
+                <div class="purchase-info">
+                    <span>Cost: <strong id="modalItemCost">0</strong> Credits</span>
+                    <span>Your Balance: <strong id="modalCreditsBalance">0</strong> Credits</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelPurchase">Cancel</button>
+                <button class="btn-confirm" id="confirmPurchase">Purchase</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content details-modal">
+            <div class="modal-header">
+                <h2 id="detailsItemName">Item Details</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="item-full-description" id="detailsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="closeDetails">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="shop.js"></script>
+</body>
+</html>
