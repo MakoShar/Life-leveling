@@ -28,9 +28,9 @@ python -m http.server 8000
 
 Notes
 - Data is stored locally in your browser. Clearing site data will reset progress.
-- This is intentionally lightweight and dependency-free. If you'd like syncing (Google Drive, Git, or remote DB), I can add that.
+- This is intentionally lightweight and dependency-free.
 
-Next steps (optional ideas)
+Future Scope for now
 - Add login and cloud sync
 - Add streaks, daily quest scheduling, and reminders
 - Export/import progress
