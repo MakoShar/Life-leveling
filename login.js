@@ -15,14 +15,7 @@ if (loginBtn) {
             loginBtn.disabled = true;
             loginBtn.style.opacity = '0.7';
 
-            // Calculate redirect URL safely
-            // We want to go to index.html in the same directory
-            // On localhost, we use the base origin to match Supabase "Redirect URLs"
-            // On GitHub Pages, we use the full path to index.html
-            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const redirectUrl = isLocalhost 
-                ? window.location.origin
-                : window.location.href.replace('login.html', 'index.html').split('?')[0].split('#')[0];
+            const redirectUrl = getAppUrl('index.html');
 
             console.log('Redirecting to:', redirectUrl);
 
@@ -84,7 +77,7 @@ if (loginForm) {
 supabaseClient.auth.onAuthStateChange((event, session) => {
     console.log('Auth State Change:', event);
     if (session) {
-        window.location.href = 'index.html';
+        goToAppPage('index.html');
     }
 });
 
@@ -95,7 +88,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         if (error) throw error;
         if (session) {
             console.log('Session detected, redirecting...');
-            window.location.href = 'index.html';
+            goToAppPage('index.html');
         }
     } catch (error) {
         console.error('Session check failed:', error);

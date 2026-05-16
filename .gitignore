@@ -1,7 +1,6 @@
 # Sensitive Files & API Keys
 .env
-.env.*
-supabase-client.js
+
 
 # Project specific directories
 .qodo/

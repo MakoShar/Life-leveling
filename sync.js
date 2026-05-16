@@ -1,6 +1,10 @@
 // Data sync utility with debounce and cloud priority
 let syncTimeout = null;
 
+function shouldSyncLocalStorageKey(key) {
+    return key.startsWith('solo_leveling_');
+}
+
 function updateSyncStatus(status) {
     let statusContainer = document.getElementById('supabase-sync-status-container');
     if (!statusContainer) {
@@ -84,15 +88,21 @@ function updateSyncStatus(status) {
     const text = statusEl.querySelector('.sync-text');
     
     dot.classList.remove('syncing', 'offline');
+    const normalizedStatus = String(status || '').toLowerCase();
+    const isOfflineStatus = normalizedStatus === 'offline' ||
+        normalizedStatus === 'offline mode' ||
+        normalizedStatus.includes('failed') ||
+        normalizedStatus.includes('saved locally') ||
+        normalizedStatus.includes('unavailable');
     
     if (status === 'Syncing...') {
         dot.classList.add('syncing');
         text.textContent = 'Syncing';
     } else if (status === 'Synced') {
         text.textContent = 'Synced';
-    } else if (status === 'Offline' || status === 'Offline mode') {
+    } else if (isOfflineStatus) {
         dot.classList.add('offline');
-        text.textContent = 'Offline';
+        text.textContent = status || 'Offline';
     } else if (status === 'Loading cloud data...') {
         dot.classList.add('syncing');
         text.textContent = 'Loading';
@@ -118,7 +128,7 @@ window.syncToSupabase = function(key, value) {
             const allData = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
-                if (!k.startsWith('supabaseClient.auth.')) {
+                if (shouldSyncLocalStorageKey(k)) {
                     allData[k] = localStorage.getItem(k);
                 }
             }
@@ -134,10 +144,13 @@ window.syncToSupabase = function(key, value) {
             if (error) throw error;
             
             updateSyncStatus('Synced');
-            setTimeout(() => { if(document.getElementById('sync-status')?.textContent === 'Synced') updateSyncStatus(''); }, 2000);
+            setTimeout(() => {
+                const statusEl = document.getElementById('supabase-sync-status');
+                if (statusEl?.textContent.includes('Synced')) updateSyncStatus('');
+            }, 2000);
         } catch (error) {
             console.error('Error syncing to Supabase:', error);
-            updateSyncStatus('Sync failed (Saved locally)');
+            updateSyncStatus('Offline (saved locally)');
         }
     }, 2000);
 };
@@ -162,11 +175,14 @@ window.loadFromSupabase = async function() {
         if (data && data.data) {
             const cloudData = data.data;
             for (const key in cloudData) {
-                localStorage.setItem(key, cloudData[key]);
+                if (shouldSyncLocalStorageKey(key)) {
+                    localStorage.setItem(key, cloudData[key]);
+                }
             }
         }
         updateSyncStatus('Synced');
-        setTimeout(() => { if(document.getElementById('sync-status')?.textContent === 'Synced') updateSyncStatus(''); }, 2000);
+        const statusEl = document.getElementById('supabase-sync-status');
+        setTimeout(() => { if(statusEl?.textContent.includes('Synced')) updateSyncStatus(''); }, 2000);
     } catch (error) {
         console.error('Error loading from Supabase:', error);
         updateSyncStatus('Offline mode');

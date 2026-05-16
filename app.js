@@ -20,7 +20,7 @@
               authBtn.className = 'btn ghost';
               authBtn.onclick = async () => {
                   await supabaseClient.auth.signOut();
-                  window.location.reload();
+                  goToAppPage('index.html');
               };
           }
       } else {
@@ -28,7 +28,7 @@
           if (authBtn) {
               authBtn.textContent = 'Login to Sync';
               authBtn.className = 'btn primary';
-              authBtn.onclick = () => window.location.href = 'login.html';
+              authBtn.onclick = () => goToAppPage('login.html');
           }
       }
       document.body.classList.remove('page-hidden');
