@@ -123,7 +123,7 @@ window.syncToSupabase = function(key, value) {
                 }
             }
 
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('user_data')
                 .upsert({ 
                     user_id: session.user.id, 
@@ -149,7 +149,7 @@ window.loadFromSupabase = async function() {
         if (!session) return;
 
         updateSyncStatus('Loading cloud data...');
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('user_data')
             .select('data')
             .eq('user_id', session.user.id)
