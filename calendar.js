@@ -8,7 +8,7 @@ let selectedDate = new Date();
 // Initialize calendar
 async function initCalendarApp() {
     try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
         if (!session) {
             window.location.href = 'login.html';

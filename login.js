@@ -26,7 +26,7 @@ if (loginBtn) {
 
             console.log('Redirecting to:', redirectUrl);
 
-            const { error } = await supabase.auth.signInWithOAuth({
+            const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
                     redirectTo: redirectUrl
@@ -61,7 +61,7 @@ if (loginForm) {
             emailLoginBtn.disabled = true;
             emailLoginBtn.style.opacity = '0.7';
 
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password,
             });
@@ -81,7 +81,7 @@ if (loginForm) {
 }
 
 // Redirect if already logged in or upon successful redirect back
-supabase.auth.onAuthStateChange((event, session) => {
+supabaseClient.auth.onAuthStateChange((event, session) => {
     console.log('Auth State Change:', event);
     if (session) {
         window.location.href = 'index.html';
@@ -91,7 +91,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 // Initial session check
 (async function checkSession() {
     try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
         if (session) {
             console.log('Session detected, redirecting...');
