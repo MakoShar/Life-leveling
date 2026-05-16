@@ -1,9 +1,57 @@
 /* app.js
    Solo Leveling — Skill Tracker
 */
-(function(){
+(async function initApp(){
   const STORAGE_KEY = 'solo_leveling_state_v1';
 
+  try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      const authBtn = document.getElementById('authActionBtn');
+
+      if (session) {
+          console.log('Session active. Synchronizing cloud data...');
+          if(typeof loadFromSupabase === 'function') await loadFromSupabase();
+          
+          syncProfileName(session.user);
+          
+          if (authBtn) {
+              authBtn.textContent = 'Logout';
+              authBtn.className = 'btn ghost';
+              authBtn.onclick = async () => {
+                  await supabase.auth.signOut();
+                  window.location.reload();
+              };
+          }
+      } else {
+          console.log('Guest mode active.');
+          if (authBtn) {
+              authBtn.textContent = 'Login to Sync';
+              authBtn.className = 'btn primary';
+              authBtn.onclick = () => window.location.href = 'login.html';
+          }
+      }
+      document.body.classList.remove('page-hidden');
+  } catch (err) {
+      console.error('Auth Guard Error:', err);
+      document.body.classList.remove('page-hidden');
+  }
+
+  function syncProfileName(user) {
+      const defaultName = 'User name';
+      const googleName = user.user_metadata?.full_name || user.user_metadata?.name;
+      const rawState = localStorage.getItem(STORAGE_KEY);
+      if (rawState && googleName) {
+          try {
+              const stateObj = JSON.parse(rawState);
+              if (!stateObj.userName || stateObj.userName === defaultName) {
+                  stateObj.userName = googleName;
+                  localStorage.setItem(STORAGE_KEY, JSON.stringify(stateObj));
+                  console.log('👤 Profile name synchronized:', googleName);
+              }
+          } catch (e) {}
+      }
+  }
   // DOM
   const xpEl = document.getElementById('xp');
   const levelEl = document.getElementById('level');
@@ -147,7 +195,12 @@
     }
   }
 
-  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function saveState(){ 
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
+      if (typeof syncToSupabase === 'function') {
+          syncToSupabase(STORAGE_KEY, JSON.stringify(state));
+      }
+  }
 
   // XP math: cumulative thresholds using a growth curve
   function xpForLevelSingle(level){ return Math.round(100 * Math.pow(level, 1.15)); }

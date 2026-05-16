@@ -17,7 +17,10 @@
 					<button class="btn ghost" onclick="window.location.href='shop.html'">Shop</button>
 					<button class="btn ghost" onclick="window.location.href='dungeons.html'">Dungeon</button>
 					<button class="btn ghost" onclick="window.location.href='settings.html'">⚙️ Settings</button>
+					<button id="authActionBtn" class="btn primary" onclick="window.location.href='login.html'">Login to Sync</button>
 				</div>
+				<div id="supabase-sync-status-container"></div>
+
 			</header>				<aside class="left-sidebar">
 					<h3>Inventory</h3>
 					<div class="inventory-list">
@@ -36,9 +39,9 @@
 						<div class="stat-allocation-header">
 							<div class="stat-points-display">
 								Stat Points: <strong id="statPoints">5</strong>
-								<button id="convertToCredits" class="btn secondary" style="margin-left: 12px; font-size: 0.85em; padding: 6px 12px;">Convert to Credits</button>
+								<button id="convertToCredits" class="btn secondary btn-convert">Convert to Credits</button>
 							</div>
-							<div style="font-size: 0.8em; color: var(--muted); margin-top: 4px;">
+							<div class="stat-hint">
 								Stats increase automatically through quests | 35 points = 1 credit
 							</div>
 						</div>
@@ -93,6 +96,7 @@
 
 							<aside class="right-sidebar">
 								<div class="profile-card">
+									<div id="supabase-sync-status-container"></div>
 									<img id="avatarImg" src="Images/Default_profile.png" alt="Avatar" class="avatar-img" />
 									<h3 id="userName">User name</h3>
 									<div class="profile-row">
@@ -110,7 +114,7 @@
 									</ul>
 									<h4>Penalties</h4>
 									<div class="penalties" id="penaltiesDisplay">None</div>
-									<button id="clearPjogBtn" class="btn secondary" style="margin-top: 8px; display: none; font-size: 0.85em; padding: 6px 12px;">Use Scroll 📜</button>
+									<button id="clearPjogBtn" class="btn secondary btn-scroll hidden">Use Scroll 📜</button>
 								</div>
 							</aside>
 
@@ -136,25 +140,25 @@
 					<input id="questXp" type="number" min="1" value="15" required />
 				</label>
 				
-				<h4 style="margin-top: 12px; margin-bottom: 8px; font-size: 0.9em;">Stat Rewards (Optional)</h4>
-				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-					<label style="font-size: 0.85em;">
-						STR <input id="questSTR" type="number" min="0" value="0" style="padding: 4px;" />
+				<h4 class="stat-rewards-heading">Stat Rewards (Optional)</h4>
+				<div class="stat-rewards-grid">
+					<label class="stat-reward-label">
+						STR <input id="questSTR" type="number" min="0" value="0" class="stat-input" />
 					</label>
-					<label style="font-size: 0.85em;">
-						AGI <input id="questAGI" type="number" min="0" value="0" style="padding: 4px;" />
+					<label class="stat-reward-label">
+						AGI <input id="questAGI" type="number" min="0" value="0" class="stat-input" />
 					</label>
-					<label style="font-size: 0.85em;">
-						CHR <input id="questCHR" type="number" min="0" value="0" style="padding: 4px;" />
+					<label class="stat-reward-label">
+						CHR <input id="questCHR" type="number" min="0" value="0" class="stat-input" />
 					</label>
-					<label style="font-size: 0.85em;">
-						STA <input id="questSTA" type="number" min="0" value="0" style="padding: 4px;" />
+					<label class="stat-reward-label">
+						STA <input id="questSTA" type="number" min="0" value="0" class="stat-input" />
 					</label>
-					<label style="font-size: 0.85em;">
-						INT <input id="questINT" type="number" min="0" value="0" style="padding: 4px;" />
+					<label class="stat-reward-label">
+						INT <input id="questINT" type="number" min="0" value="0" class="stat-input" />
 					</label>
-					<label style="font-size: 0.85em;">
-						WIL <input id="questWIL" type="number" min="0" value="0" style="padding: 4px;" />
+					<label class="stat-reward-label">
+						WIL <input id="questWIL" type="number" min="0" value="0" class="stat-input" />
 					</label>
 				</div>
 				
@@ -295,6 +299,9 @@
 
 		<canvas id="confetti"></canvas>
 
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<script src="supabase-client.js"></script>
+		<script src="sync.js"></script>
 		<script src="app.js" defer></script>
 	</body>
 </html>

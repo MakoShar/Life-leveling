@@ -6,15 +6,42 @@ let currentDate = new Date();
 let selectedDate = new Date();
 
 // Initialize calendar
-document.addEventListener('DOMContentLoaded', function() {
-    checkAndResetDailyQuests();
-    loadCalendarData();
-    renderCalendar();
-    renderMiniCalendar();
-    renderProfile();
-    renderTodaysTasks();
-    setupEventListeners();
-});
+async function initCalendarApp() {
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!session) {
+            window.location.href = 'login.html';
+            return;
+        }
+        await loadFromSupabase();
+        
+        // Reveal UI
+        document.body.style.visibility = 'visible';
+    } catch (err) {
+        console.error('Auth Error:', err);
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const runInit = () => {
+        checkAndResetDailyQuests();
+        loadCalendarData();
+        renderCalendar();
+        renderMiniCalendar();
+        renderProfile();
+        renderTodaysTasks();
+        setupEventListeners();
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runInit);
+    } else {
+        runInit();
+    }
+}
+
+initCalendarApp();
 
 // Check if day has changed and reset daily quests
 function checkAndResetDailyQuests() {
@@ -41,7 +68,7 @@ function checkAndResetDailyQuests() {
         
         // Save updated data
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            syncToSupabase(STORAGE_KEY, JSON.stringify(data));
         } catch (e) {
             console.error('Error resetting daily quests:', e);
         }
@@ -639,7 +666,7 @@ function checkAllDailyQuestsComplete(data) {
         
         // Save to localStorage
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            syncToSupabase(STORAGE_KEY, JSON.stringify(data));
             showNotification('🎉 All daily quests complete! +3 Credits awarded!');
             console.log('Credits awarded! New total:', data.gold);
         } catch (err) {
@@ -736,7 +763,7 @@ function renderDailyQuests(data) {
                 
                 // Save to localStorage
                 try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                    syncToSupabase(STORAGE_KEY, JSON.stringify(data));
                 } catch (err) {
                     console.error('Error saving daily quest state:', err);
                 }
@@ -959,7 +986,7 @@ function saveTask(taskData) {
     data.calendarTasks.push(taskData);
     
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        syncToSupabase(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
         console.error('Error saving task:', e);
     }

@@ -1,5 +1,25 @@
 // Settings Page Logic
-(function() {
+(async function initSettings() {
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!session) {
+            window.location.href = 'login.html';
+            return;
+        }
+        await loadFromSupabase();
+        
+        // Reveal UI
+        document.body.style.visibility = 'visible';
+        startSettings();
+    } catch (err) {
+        console.error('Auth Error:', err);
+        window.location.href = 'login.html';
+        return;
+    }
+})();
+
+function startSettings() {
     const STORAGE_KEY = 'solo_leveling_state_v1';
     const SETTINGS_KEY = 'solo_leveling_settings_v1';
 
@@ -80,7 +100,7 @@
             const stateRaw = localStorage.getItem(STORAGE_KEY);
             const state = stateRaw ? JSON.parse(stateRaw) : {};
             state.userName = newName;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            syncToSupabase(STORAGE_KEY, JSON.stringify(state));
             showToast('✅ Username saved!');
         } catch (e) {
             showToast('❌ Error saving username');
@@ -273,7 +293,7 @@
                 const stateRaw = localStorage.getItem(STORAGE_KEY);
                 const state = stateRaw ? JSON.parse(stateRaw) : {};
                 state.avatarImage = compressedData;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                syncToSupabase(STORAGE_KEY, JSON.stringify(state));
                 showToast('✅ Avatar cropped & saved! (500x500)');
                 hideCropModal();
             } catch (e) {
@@ -291,7 +311,7 @@
             const stateRaw = localStorage.getItem(STORAGE_KEY);
             const state = stateRaw ? JSON.parse(stateRaw) : {};
             delete state.avatarImage;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            syncToSupabase(STORAGE_KEY, JSON.stringify(state));
             showToast('✅ Avatar reset to default');
         } catch (e) {
             showToast('❌ Error resetting avatar');
@@ -308,7 +328,7 @@
         };
 
         try {
-            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            syncToSupabase(SETTINGS_KEY, JSON.stringify(settings));
             showToast('✅ Settings saved!');
         } catch (e) {
             showToast('❌ Error saving settings');
@@ -357,10 +377,10 @@
                 const importedData = JSON.parse(event.target.result);
                 
                 if (importedData.state) {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(importedData.state));
+                    syncToSupabase(STORAGE_KEY, JSON.stringify(importedData.state));
                 }
                 if (importedData.settings) {
-                    localStorage.setItem(SETTINGS_KEY, JSON.stringify(importedData.settings));
+                    syncToSupabase(SETTINGS_KEY, JSON.stringify(importedData.settings));
                 }
                 
                 showToast('✅ Data imported! Reloading...');
@@ -382,8 +402,8 @@
             'Are you ABSOLUTELY sure? This will delete ALL your progress, quests, stats, and purchases. This cannot be undone!',
             () => {
                 try {
-                    localStorage.removeItem(STORAGE_KEY);
-                    localStorage.removeItem(SETTINGS_KEY);
+                    syncToSupabase(STORAGE_KEY, "{}");
+                    syncToSupabase(SETTINGS_KEY, "{}");
                     showToast('✅ All data deleted. Redirecting...');
                     setTimeout(() => {
                         window.location.href = 'index.html';
@@ -464,4 +484,4 @@
     // Initialize
     loadSettings();
     initCropHandlers();
-})();
+}

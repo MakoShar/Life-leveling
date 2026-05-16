@@ -13,11 +13,13 @@
 					<h1>Settings</h1>
 				</div>
 				<div class="top-actions">
+					<button class="btn ghost" onclick="supabase.auth.signOut().then(() => window.location.href='login.html')">Sign Out</button>
 					<button class="btn ghost" onclick="window.location.href='index.html'">← Back to Dashboard</button>
 				</div>
 			</header>
 
 			<div class="settings-content">
+				<div id="supabase-sync-status-container"></div>
 				<section class="settings-card">
 					<h2>Profile Settings</h2>
 					
@@ -35,7 +37,7 @@
 						<div class="avatar-section">
 							<img id="avatarPreview" src="Images/Default_profile.png" alt="Avatar Preview" class="avatar-preview" />
 							<div class="avatar-controls">
-								<input type="file" id="avatarUpload" accept="image/*" style="display: none;" />
+								<input type="file" id="avatarUpload" accept="image/*" class="input-hidden" />
 								<button class="btn secondary" id="uploadAvatarBtn">Upload Image</button>
 								<button class="btn ghost" id="resetAvatarBtn">Reset to Default</button>
 							</div>
@@ -49,7 +51,7 @@
 					
 					<div class="setting-group">
 						<label>Daily Quest Reset Time</label>
-						<select id="resetTime" class="setting-select">
+						<select id="resetTime" class="setting-select" title="Daily Quest Reset Time">
 							<option value="0">12:00 AM (Midnight)</option>
 							<option value="6">6:00 AM</option>
 							<option value="12">12:00 PM (Noon)</option>
@@ -65,7 +67,7 @@
 								<p class="help-text">Play sounds on level up and quest completion</p>
 							</div>
 							<label class="toggle">
-								<input type="checkbox" id="soundToggle" checked />
+								<input type="checkbox" id="soundToggle" aria-label="Sound Effects" checked />
 								<span class="toggle-slider"></span>
 							</label>
 						</div>
@@ -78,7 +80,7 @@
 								<p class="help-text">Get reminded about daily quest resets</p>
 							</div>
 							<label class="toggle">
-								<input type="checkbox" id="notificationsToggle" />
+								<input type="checkbox" id="notificationsToggle" aria-label="Browser Notifications" />
 								<span class="toggle-slider"></span>
 							</label>
 						</div>
@@ -96,7 +98,7 @@
 
 					<div class="setting-group">
 						<label>Import Data</label>
-						<input type="file" id="importDataInput" accept=".json" style="display: none;" />
+						<input type="file" id="importDataInput" accept=".json" class="input-hidden" aria-label="Import data JSON file" />
 						<button class="btn secondary" id="importDataBtn">📤 Import Progress</button>
 						<p class="help-text">Restore progress from a backup file</p>
 					</div>
@@ -141,7 +143,7 @@
 		<div id="cropModal" class="modal" aria-hidden="true">
 			<div class="modal-card crop-modal">
 				<h3>Crop Your Avatar</h3>
-				<p style="color: #b8956a; margin-bottom: 15px;">Drag and resize the crop area to select the perfect square</p>
+				<p class="crop-subtitle">Drag and resize the crop area to select the perfect square</p>
 				<div class="crop-container">
 					<img id="cropImage" src="" alt="Image to crop" />
 					<div id="cropBox" class="crop-box">
@@ -158,6 +160,9 @@
 			</div>
 		</div>
 
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<script src="supabase-client.js"></script>
+		<script src="sync.js"></script>
 		<script src="settings.js"></script>
 	</body>
 </html>
