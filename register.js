@@ -26,11 +26,7 @@ if (registerForm) {
             registerBtn.disabled = true;
             registerBtn.style.opacity = '0.7';
 
-            // Calculate redirect URL safely
-            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const redirectUrl = isLocalhost 
-                ? window.location.origin
-                : window.location.href.replace('register.html', 'index.html').split('?')[0].split('#')[0];
+            const redirectUrl = getAppUrl('index.html');
 
             const { data, error } = await supabaseClient.auth.signUp({
                 email: email,
@@ -47,11 +43,11 @@ if (registerForm) {
             
             if (data?.session) {
                 // Auto-login successful
-                window.location.href = 'index.html';
+                goToAppPage('index.html');
             } else {
                 // Email confirmation required
                 alert('Registration successful! Please check your email to verify your account before signing in.');
-                window.location.href = 'login.html';
+                goToAppPage('login.html');
             }
             
         } catch (error) {
@@ -68,7 +64,7 @@ if (registerForm) {
 // Redirect if already logged in
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
-        window.location.href = 'index.html';
+        goToAppPage('index.html');
     }
 });
 
@@ -78,7 +74,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         const { data: { session }, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
         if (session) {
-            window.location.href = 'index.html';
+            goToAppPage('index.html');
         }
     } catch (error) {
         console.error('Session check failed:', error);
