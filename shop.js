@@ -3,7 +3,7 @@
  */
 (async function initAuth() {
     try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
         if (!session) {
             window.location.href = 'login.html';
@@ -471,7 +471,7 @@ let purchasedItems = [];
 
 // Initialize Shop
 async function initShopApp() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session) {
         window.location.href = 'login.html';
         return;

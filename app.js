@@ -5,7 +5,7 @@
   const STORAGE_KEY = 'solo_leveling_state_v1';
 
   try {
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) throw error;
       const authBtn = document.getElementById('authActionBtn');
 
@@ -19,7 +19,7 @@
               authBtn.textContent = 'Logout';
               authBtn.className = 'btn ghost';
               authBtn.onclick = async () => {
-                  await supabase.auth.signOut();
+                  await supabaseClient.auth.signOut();
                   window.location.reload();
               };
           }

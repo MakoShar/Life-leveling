@@ -109,7 +109,7 @@ window.syncToSupabase = function(key, value) {
     clearTimeout(syncTimeout);
     syncTimeout = setTimeout(async () => {
         try {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
                 updateSyncStatus('Offline');
                 return;
@@ -118,7 +118,7 @@ window.syncToSupabase = function(key, value) {
             const allData = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
-                if (!k.startsWith('supabase.auth.')) {
+                if (!k.startsWith('supabaseClient.auth.')) {
                     allData[k] = localStorage.getItem(k);
                 }
             }
@@ -145,7 +145,7 @@ window.syncToSupabase = function(key, value) {
 // Load data from Supabase to localStorage
 window.loadFromSupabase = async function() {
     try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabaseClient.auth.getSession();
         if (!session) return;
 
         updateSyncStatus('Loading cloud data...');

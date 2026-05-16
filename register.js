@@ -32,7 +32,7 @@ if (registerForm) {
                 ? window.location.origin
                 : window.location.href.replace('register.html', 'index.html').split('?')[0].split('#')[0];
 
-            const { data, error } = await supabase.auth.signUp({
+            const { data, error } = await supabaseClient.auth.signUp({
                 email: email,
                 password: password,
                 options: {
@@ -66,7 +66,7 @@ if (registerForm) {
 }
 
 // Redirect if already logged in
-supabase.auth.onAuthStateChange((event, session) => {
+supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
         window.location.href = 'index.html';
     }
@@ -75,7 +75,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 // Initial session check
 (async function checkSession() {
     try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
         if (session) {
             window.location.href = 'index.html';
