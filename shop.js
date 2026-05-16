@@ -1,3 +1,24 @@
+/**
+ * Authentication Guard - Must run before any shop logic
+ */
+(async function initAuth() {
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!session) {
+            window.location.href = 'login.html';
+            return;
+        }
+        await loadFromSupabase();
+        startShop();
+        document.body.style.visibility = 'visible';
+    } catch (err) {
+        console.error('Auth Error:', err);
+        window.location.href = 'login.html';
+    }
+})();
+
+function startShop() {
 // Shop Items Database
 const shopItems = [
     // Mental Health Category
@@ -449,13 +470,30 @@ let userCredits = 0;
 let purchasedItems = [];
 
 // Initialize Shop
-document.addEventListener('DOMContentLoaded', () => {
-    loadUserData();
-    renderItems(currentCategory);
-    setupEventListeners();
-    updateCreditsDisplay();
-    updateSidebar();
-});
+async function initShopApp() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        window.location.href = 'login.html';
+        return;
+    }
+    await loadFromSupabase();
+
+    const runInit = () => {
+        loadUserData();
+        renderItems(currentCategory);
+        setupEventListeners();
+        updateCreditsDisplay();
+        updateSidebar();
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runInit);
+    } else {
+        runInit();
+    }
+}
+
+initShopApp();
 
 // Load user data from localStorage
 function loadUserData() {
@@ -469,7 +507,7 @@ function saveUserData() {
     const state = JSON.parse(localStorage.getItem('solo_leveling_state_v1')) || {};
     state.gold = userCredits;
     state.purchasedShopItems = purchasedItems;
-    localStorage.setItem('solo_leveling_state_v1', JSON.stringify(state));
+    syncToSupabase('solo_leveling_state_v1', JSON.stringify(state));
 }
 
 // Update credits display
@@ -668,7 +706,7 @@ function applyItemEffect(item) {
             break;
     }
 
-    localStorage.setItem('solo_leveling_state_v1', JSON.stringify(state));
+    syncToSupabase('solo_leveling_state_v1', JSON.stringify(state));
 }
 
 // Close all modals
@@ -702,3 +740,4 @@ function updateSidebar() {
         </div>
     `).join('');
 }
+} // end startShop

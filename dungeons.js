@@ -1,3 +1,24 @@
+/**
+ * Authentication Guard - Must run before any dungeon logic
+ */
+(async function initAuth() {
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!session) {
+            window.location.href = 'login.html';
+            return;
+        }
+        await loadFromSupabase();
+        startDungeons();
+        document.body.style.visibility = 'visible';
+    } catch (err) {
+        console.error('Auth Error:', err);
+        window.location.href = 'login.html';
+    }
+})();
+
+function startDungeons() {
 // Dungeons Data - Real Life Challenges
 const dungeons = [
     {
@@ -205,12 +226,30 @@ let activeDungeon = null;
 let dungeonProgress = 0;
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    loadPlayerData();
-    renderDungeons();
-    setupEventListeners();
-    updatePlayerDisplay();
-});
+// Initialize
+async function initDungeonsApp() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        window.location.href = 'login.html';
+        return;
+    }
+    await loadFromSupabase();
+
+    const runInit = () => {
+        loadPlayerData();
+        renderDungeons();
+        setupEventListeners();
+        updatePlayerDisplay();
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runInit);
+    } else {
+        runInit();
+    }
+}
+
+initDungeonsApp();
 
 // Load player data from main system
 function loadPlayerData() {
@@ -420,7 +459,7 @@ function completeDungeon() {
         }
     }
     
-    localStorage.setItem('solo_leveling_state_v1', JSON.stringify(state));
+    syncToSupabase('solo_leveling_state_v1', JSON.stringify(state));
 
     // Build rewards display
     let rewardsHtml = `
@@ -468,3 +507,4 @@ function closeAllModals() {
     document.getElementById('dungeonModal').style.display = 'none';
     document.getElementById('completionModal').style.display = 'none';
 }
+} // end startDungeons

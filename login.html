@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solo Leveling — Login</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-card {
+      background: linear-gradient(135deg, rgba(139, 90, 43, 0.3), rgba(0, 0, 0, 0.5));
+      padding: 40px;
+      border-radius: 12px;
+      border: 2px solid #8b5a2b;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+    }
+    .back-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #b8956a;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .back-link:hover {
+      color: #d4af37;
+    }
+    .login-card h1 {
+      color: #d4af37;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+      margin-bottom: 30px;
+      font-size: 3rem;
+    }
+    .login-btn {
+      background: linear-gradient(135deg, #d4af37, #8b5a2b);
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      color: #b8956a;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(184, 149, 106, 0.3);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 1rem;
+    }
+    .divider {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      color: rgba(184, 149, 106, 0.6);
+      font-size: 0.9rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(184, 149, 106, 0.3);
+    }
+    .divider::before { margin-right: 10px; }
+    .divider::after { margin-left: 10px; }
+    .google-btn {
+      background: transparent;
+      color: #b8956a;
+      border: 1px solid #b8956a;
+    }
+    .google-btn:hover {
+      background: rgba(184, 149, 106, 0.1);
+      box-shadow: 0 0 10px rgba(184, 149, 106, 0.3);
+    }
+    .auth-link {
+      margin-top: 20px;
+      display: block;
+      color: #b8956a;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .auth-link:hover {
+      color: #d4af37;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <a href="index.html" class="back-link">← Back to System</a>
+      <h1>Arise.</h1>
+      <p class="login-subtitle">Sign in to access your status window.</p>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="hunter@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" id="emailLoginBtn" class="login-btn">Enter System</button>
+      </form>
+      
+      <div class="divider">OR</div>
+      
+      <button id="loginBtn" class="login-btn google-btn">Sign in with Google</button>
+      
+      <a href="register.html" class="auth-link">Not registered? Awaken here.</a>
+    </div>
+  </div>
+  <script src="login.js"></script>
+</body>
+</html>
